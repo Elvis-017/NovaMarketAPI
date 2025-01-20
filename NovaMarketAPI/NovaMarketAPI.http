@@ -1,0 +1,6 @@
+@NovaMarketAPI_HostAddress = http://localhost:5005
+
+GET {{NovaMarketAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
