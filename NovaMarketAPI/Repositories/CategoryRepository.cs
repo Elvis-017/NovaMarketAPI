@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using NovaMarketAPI.DapperDB;
 using NovaMarketAPI.Interfaces;
 using NovaMarketAPI.Models;
@@ -23,14 +24,40 @@ namespace NovaMarketAPI.Repositories
             return result.ToList();
         }
 
-        public void SP_ModifyCategories(int categoryId, int userId, string? name, bool isDeleted)
+        public async void SP_ModifyCategories(CategoriesMD category)
         {
-            throw new NotImplementedException();
+            using (var connect = _dapperContext.CreateDbConnection())
+            {
+                var procedure = "SP_ModifyCategories";
+
+                DynamicParameters parameters = new DynamicParameters(new
+                {
+                    CategoryId = category.Id,
+                    category.UserId,
+                    Name = category.Name == null ? null : category.Name,
+                    IsDeleted = category.IsDeleted == null ? false : category.IsDeleted
+                });
+
+                await connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+            }
         }
 
-        public void SP_SaveCategories(string name, int userId)
+        public async void SP_SaveCategories(CategoriesMD category)
         {
-            throw new NotImplementedException();
+            using (var connect = _dapperContext.CreateDbConnection())
+            {
+
+                var procedure = "SP_SaveCategories";
+
+                DynamicParameters parameters = new DynamicParameters(new
+                {
+                    category.Name,
+                    category.UserId
+                });
+
+                await connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+
+            }
         }
     }
 }
