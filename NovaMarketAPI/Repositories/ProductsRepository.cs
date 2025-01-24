@@ -19,13 +19,26 @@ namespace NovaMarketAPI.Repositories
 
         public async Task<IEnumerable<ProductsMD>> FUN_GetProducts()
         {
-            string query = @"SELECT * FROM [dbo].[FUN_GetProducts]()
+
+            try
+            {
+                string query = @"SELECT * FROM [dbo].[FUN_GetProducts]()
                             ORDER BY CreateDate DESC";
 
-            using var connect = _dapperContext.CreateDbConnection();
-            var result = await connect.QueryAsync<ProductsMD>(query);
+                using var connect = _dapperContext.CreateDbConnection();
+                var result = await connect.QueryAsync<ProductsMD>(query);
 
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"SQL Error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
+            }
+
         }
 
         public async Task SP_ModifyProducts(ProductsMD products)

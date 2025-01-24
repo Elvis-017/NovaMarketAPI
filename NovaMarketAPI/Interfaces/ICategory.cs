@@ -7,7 +7,7 @@ namespace NovaMarketAPI.Interfaces
     {
         Task<IEnumerable<CategoriesMD>> FUN_GetCategories();
 
-        void SP_SaveCategories(CategoriesMD category);
-        void SP_ModifyCategories(CategoriesMD categoriesMD);
+        Task SP_SaveCategories(CategoriesMD category);
+        Task SP_ModifyCategories(CategoriesMD categoriesMD);
     }
 }

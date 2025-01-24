@@ -17,16 +17,27 @@ namespace NovaMarketAPI.Repositories
         }
         public async Task<IEnumerable<CategoriesMD>> FUN_GetCategories()
         {
-            string query = @"SELECT * FROM [dbo].[FUN_GetCategories]()
+            try
+            {
+                string query = @"SELECT * FROM [dbo].[FUN_GetCategories]()
                             ORDER BY CreateDate DESC";
 
-            using var connect = _dapperContext.CreateDbConnection();
-            var result = await connect.QueryAsync<CategoriesMD>(query);
+                using var connect = _dapperContext.CreateDbConnection();
+                var result = await connect.QueryAsync<CategoriesMD>(query);
 
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"SQL Error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
+            }
         }
 
-        public async void SP_ModifyCategories(CategoriesMD category)
+        public async Task SP_ModifyCategories(CategoriesMD category)
         {
             try
             {
@@ -55,7 +66,7 @@ namespace NovaMarketAPI.Repositories
             }
         }
 
-        public async void SP_SaveCategories(CategoriesMD category)
+        public async Task SP_SaveCategories(CategoriesMD category)
         {
             try
             {
