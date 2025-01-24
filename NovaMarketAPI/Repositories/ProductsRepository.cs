@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using NovaMarketAPI.DapperDB;
 using NovaMarketAPI.Interfaces;
 using NovaMarketAPI.Models;
@@ -11,7 +12,8 @@ namespace NovaMarketAPI.Repositories
 
         private readonly DapperContext _dapperContext;
 
-        public ProductsRepository(DapperContext dapperContext) {
+        public ProductsRepository(DapperContext dapperContext)
+        {
             _dapperContext = dapperContext;
         }
 
@@ -26,40 +28,63 @@ namespace NovaMarketAPI.Repositories
             return result.ToList();
         }
 
-        public async void SP_ModifyProducts(ProductsMD products)
+        public async Task SP_ModifyProducts(ProductsMD products)
         {
-            using (var connect = _dapperContext.CreateDbConnection())
+
+            try
             {
-                var procedure = "SP_ModifyProducts";
-
-                DynamicParameters parameters = new DynamicParameters(new
+                using (var connect = _dapperContext.CreateDbConnection())
                 {
-                    ProductId = products.Id,
-                    products.UserId,
-                    Name = products.Name == null ? null : products.Name,
-                    CategoryId = products.CategoryId == null ? null : products.CategoryId,
-                    IsDeleted = products.IsDeleted == null ? false : products.IsDeleted
-                });
+                    var procedure = "SP_ModifyProducts";
 
-                await connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+                    DynamicParameters parameters = new DynamicParameters(new
+                    {
+                        ProductId = products.Id,
+                        products.UserId,
+                        Name = products.Name == null ? null : products.Name,
+                        CategoryId = products.CategoryId == null ? null : products.CategoryId,
+                        IsDeleted = products.IsDeleted == null ? false : products.IsDeleted
+                    });
+
+                    await connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"SQL Error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
             }
         }
 
-        public async void SP_SaveProducts(ProductsMD products)
+        public async Task SP_SaveProducts(ProductsMD products)
         {
-            using (var connect = _dapperContext.CreateDbConnection()) { 
-
-                var procedure = "SP_SaveProducts";
-
-                DynamicParameters parameters = new DynamicParameters(new
+            try
+            {
+                using (var connect = _dapperContext.CreateDbConnection())
                 {
-                    products.Name,
-                    products.CategoryId,
-                    products.UserId
-                }); 
+                    var procedure = "SP_SaveProducts";
 
-                await  connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+                    DynamicParameters parameters = new DynamicParameters(new
+                    {
+                        products.Name,
+                        products.CategoryId,
+                        products.UserId
+                    });
 
+                    await connect.ExecuteAsync(procedure, parameters, commandType: CommandType.StoredProcedure);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"SQL Error: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace NovaMarketAPI.Interfaces
     {
         Task<IEnumerable<ProductsMD>> FUN_GetProducts();
 
-        void SP_SaveProducts(ProductsMD products);
-        void SP_ModifyProducts(ProductsMD products);
+        Task SP_SaveProducts(ProductsMD products);
+        Task SP_ModifyProducts(ProductsMD products);
     }
 }

@@ -38,10 +38,11 @@ namespace NovaMarketAPI.Controllers
         {
             try
             {
-                _products.SP_SaveProducts(products);
+                products.UserId = 1;
+                await _products.SP_SaveProducts(products);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -52,24 +53,27 @@ namespace NovaMarketAPI.Controllers
         {
             try
             {
+                products.UserId = 1;
                 _products.SP_ModifyProducts(products);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPost("RemoveProduct")]
+        [HttpPost("removeProduct")]
         public async Task<IActionResult> RemoveProducts([FromBody] ProductsMD products)
         {
             try
             {
+                products.UserId = 1;
+                products.IsDeleted = true;
                 _products.SP_ModifyProducts(products);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
