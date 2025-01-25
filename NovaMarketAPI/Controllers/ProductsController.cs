@@ -54,9 +54,10 @@ namespace NovaMarketAPI.Controllers
             try
             {
                 products.UserId = 1;
-                _products.SP_ModifyProducts(products);
+               await _products.SP_ModifyProducts(products);
                 return NoContent();
             }
+
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -70,7 +71,7 @@ namespace NovaMarketAPI.Controllers
             {
                 products.UserId = 1;
                 products.IsDeleted = true;
-                _products.SP_ModifyProducts(products);
+               await _products.SP_ModifyProducts(products);
                 return NoContent();
             }
             catch (Exception ex)

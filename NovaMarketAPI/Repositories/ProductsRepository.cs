@@ -32,7 +32,7 @@ namespace NovaMarketAPI.Repositories
             }
             catch (SqlException ex)
             {
-                throw new Exception($"SQL Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace NovaMarketAPI.Repositories
             }
             catch (SqlException ex)
             {
-                throw new Exception($"SQL Error: {ex.Message}", ex);
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
+                throw new Exception($"An unexpected error occurred: {ex.Message}");
             }
         }
 
@@ -93,11 +93,11 @@ namespace NovaMarketAPI.Repositories
             }
             catch (SqlException ex)
             {
-                throw new Exception($"SQL Error: {ex.Message}", ex);
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
+                throw new Exception($"An unexpected error occurred: {ex.Message}");
             }
         }
     }

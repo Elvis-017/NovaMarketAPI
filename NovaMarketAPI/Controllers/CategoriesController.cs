@@ -39,10 +39,10 @@ namespace NovaMarketAPI.Controllers
             try
             {
                 category.UserId = 1;
-                _category.SP_SaveCategories(category);
+                await _category.SP_SaveCategories(category);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -54,10 +54,10 @@ namespace NovaMarketAPI.Controllers
             try
             {
                 category.UserId = 1;
-                _category.SP_ModifyCategories(category);
+                await _category.SP_ModifyCategories(category);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -70,10 +70,10 @@ namespace NovaMarketAPI.Controllers
             {
                 category.UserId = 1;
                 category.IsDeleted = true;
-                _category.SP_ModifyCategories(category);
+                await _category.SP_ModifyCategories(category);
                 return NoContent();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
